@@ -21,6 +21,8 @@ Model Evaluation (classification metrics, cross-validation, feature importance)
 
 Source: Monster.com Job Sample Dataset
 
+https://www.kaggle.com/datasets/PromptCloudHQ/us-jobs-on-monstercom
+
 Contains job postings with features such as:
 
 Job Title
