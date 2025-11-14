@@ -1,4 +1,4 @@
-🧠 Job Market Analysis & Job Category Classification
+# 🧠 Job Market Analysis & Job Category Classification
 📌 Project Overview
 
 This project analyzes job postings and builds machine learning models to classify them into categories such as Software / IT, Business / Management, Healthcare / Medical, Sales / Marketing, and more.
