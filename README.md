@@ -1,138 +1,192 @@
-# 🧠 Job Market Analysis & Job Category Classification
-📌 Project Overview
+# 🧠 Job Market Analysis & Job Category Classification  
+A Data Science Project by **Paul Tuccinardi**
 
-This project analyzes job postings and builds machine learning models to classify them into categories such as Software / IT, Business / Management, Healthcare / Medical, Sales / Marketing, and more.
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Scikit-Learn](https://img.shields.io/badge/scikit--learn-ML-orange)
+![XGBoost](https://img.shields.io/badge/XGBoost-2.0+-brightgreen)
+![NLTK](https://img.shields.io/badge/NLP-NLTK-yellow)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
+![Status](https://img.shields.io/badge/Status-Active_Project-blue)
 
-The goal is to explore patterns in the job market and evaluate machine learning models that can automatically categorize job postings based on features like job title, description, and location.
+---
 
-This project demonstrates skills in:
+## 📌 Overview
 
-Data Cleaning & Preprocessing
+This project analyzes job postings from Monster.com and builds machine learning models to automatically classify each posting into categories such as:
 
-Exploratory Data Analysis (EDA)
+- **Technology**
+- **Business**
+- **Healthcare**
+- **Logistics**
+- **Trades**
+- **Marketing**
+- **Customer Service**
+- **Human Resources**
+- **Legal**
+- **Education**
+- **Sales**
+- **Other**
 
-Feature Engineering (categorical encoding, text processing)
+The analysis includes **deep EDA**, **geographical trends**, **salary extraction**, **NLP skill identification**, and **multiple machine learning models**.
 
-Machine Learning Modeling (Logistic Regression, Random Forest, XGBoost)
+---
 
-Model Evaluation (classification metrics, cross-validation, feature importance)
+## 📂 Dataset
 
-📂 Dataset
-
-Source: Monster.com Job Sample Dataset
-
+**Source:**  
 https://www.kaggle.com/datasets/PromptCloudHQ/us-jobs-on-monstercom
 
-Contains job postings with features such as:
+**Features include:**
+- Job id
+- Title  
+- Location (messy city/state/zip format)
+- Description 
+- Organization  
+- Salary (in many inconsistent formats)  
+- Sector  
+- Posted Date  
 
-Job Title
+**Target Variable:**  
+🟩 `job_category` (created through keyword extraction and mapping)
 
-Location (city/state)
+---
 
-Company
+## ⚙️ Methodology
 
-Job Description
+### 🔹 1. Data Cleaning & Fixing Inconsistent Fields  
+- Extracted state abbreviations from messy location strings  
+- Created new `city`, `state_clean`, and `region` features  
+- Standardized job types (Full Time, Part Time, Contract/Temp, Other)  
+- Dropped unusable columns (`country`, `job_board`, etc.)  
+- Cleaned and normalized salary strings  
+- Handled missing values and duplicates  
 
-Target variable: Job Category (e.g., Software/IT, Healthcare, Business).
+---
 
-⚙️ Methodology
-🔹 1. Data Cleaning
+### 🔹 2. Exploratory Data Analysis (EDA)
 
-Extracted and standardized job state codes from messy location strings.
+Key analyses included:
 
-Removed missing values and duplicates.
+#### 📍 Location Trends
+- **Texas** had the most job postings  
+- South & Midwest accounted for the highest hiring demand  
 
-🔹 2. Exploratory Data Analysis (EDA)
+#### 🏢 Organization & Sector Distribution
+- Sector and organization fields often mislabeled  
+- Healthcare sector dominated volume  
 
-Top job categories and their frequency distribution.
+#### 📦 Job Category Distribution  
+Custom NLP-based mapping of job titles → job_category.
 
-Geographic analysis of job postings (top states).
+#### ☁ Word Cloud of Job Titles
+Shows common keywords like *Manager, Technician, Engineer, Assistant, Sales*.
 
-Word-level analysis of job descriptions (planned extension).
+---
 
-🔹 3. Feature Engineering
+### 🔹 3. NLP Skill Extraction (New)
 
-Encoded categorical variables.
+Using **NLTK**, the project extracts skills from job descriptions by:
 
-Vectorized text features (where applicable).
+- Tokenizing  
+- Cleaning text  
+- Stopword removal  
+- Lemmatization  
+- Matching both **single-word** and **multi-word** skills  
 
-Label encoded job categories for modeling.
+**Detected skills include:**  
+`Python, SQL, Excel, AWS, Tableau, Java, Hadoop, Spark, Machine Learning, Agile, Scrum, PowerPoint, JavaScript, HTML, CSS`.
 
-🔹 4. Modeling
+**Findings:**  
+- **Excel** and **Microsoft Office** dominate the dataset  
+- **SQL** and **Java** lead technical skills  
+- Python appears less due to dataset age (2016)
 
-Logistic Regression → baseline linear model.
+---
 
-Random Forest → ensemble of decision trees.
+### 🔹 4. Salary Parsing & Midpoint Extraction (New)
 
-XGBoost → gradient boosting model.
+A specialized parser:
 
-🔹 5. Evaluation
+- Removes $, commas, "/year", etc.  
+- Extracts numeric ranges  
+- Computes midpoint salary  
+- Filters valid salary rows  
 
-Train/Test split with stratification.
+Result: **3,085 usable salaries**.
 
-Accuracy, Precision, Recall, F1-Score.
+Additional analysis:  
+- Northeast has higher average salaries  
+- Most common salary: **$20k**, then **$25k** and **0k**
 
-Cross-validation for robust performance.
+---
 
-Confusion matrices to evaluate misclassifications.
+### 🔹 5. Feature Engineering
 
+- TF-IDF vectorization (5,000 features, unigrams + bigrams)  
+- Label encoding of target categories  
+- Region, state, job_type_clean, city extracted from text  
+- Stratified train/test split  
 
-📊 Results
-Model	Test Accuracy	Macro f1	Notes
-Logistic Regression	63%	59%	Simple & interpretable baseline
-Random Forest	67%	60%	Strong baseline for tabular data
-XGBoost	69%	59%	Best performing, risk of overfitting checked
+---
 
+## 🤖 Machine Learning Models
 
-🚀 Conclusions & Next Steps
+Three models were trained:
 
-XGBoost provided the strongest performance, suggesting boosting models are highly effective for this classification task.
+| Model | Test Accuracy | Macro F1 | Notes |
+|-------|--------------|----------|-------|
+| **Logistic Regression** | ~60% | ~0.52 | Strong baseline, interpretable |
+| **Random Forest** | ~69% | ~0.61 | Best balance of accuracy & recall |
+| **XGBoost** | ~74% | ~0.66-0.67 | Best performing overall |
 
-Logistic Regression offered interpretability but struggled with minority job classes.
+### Evaluation included:
+- Precision, Recall, F1  
+- Confusion matrix heatmaps  
+- Cross-validation  
+- Per-class metrics  
 
-Random Forest provided a balance between interpretability and performance.
+**Key Issue:**  
+The “Other” category has high noise → causes most misclassifications.
+Insufficient amount of data for other job categories such as healthcare, or trades.
+---
 
-🔮 Future Improvements
+## 🚀 Conclusions
 
-utilizing an external dataset/api to test model performance
+- **XGBoost** achieved the strongest performance.  
+- **Random Forest** showed consistent accuracy across categories.  
+- **Logistic Regression** struggled with minority classes.  
+- **Dataset quality significantly limits upper-bound performance.**  
+- Many job titles were incorrectly entered resulting in skewed results.
 
-create an application to help filter jobs based on categories 
+---
 
-expand the feature engineering section to include more job types and be able to remove the other category. 
+## 🔮 Future Improvements
 
+### Based on results from this version:
 
-🛠️ Tech Stack
+✔ Improve model performance to get better results.
+✔ Use a **modern dataset (2020–2025)** to collect better more accurate data
+✔ Build a **web application** to predict job category from pasted text  
+✔ Expand dictionary for job title mapping → reduce “Other” category  
 
-Python (Pandas, NumPy, Matplotlib, Seaborn)
+---
 
-Scikit-learn
+## 🛠️ Tech Stack
 
-XGBoost
+- **Python**  
+- **Pandas** & **NumPy**  
+- **Matplotlib** & **Seaborn**  
+- **NLTK**  
+- **scikit-learn**  
+- **XGBoost**  
+- **TensorFlow / Keras**  
+- **Jupyter Notebook** / Google Colab  
 
-Jupyter Notebook / Google Colab
+---
 
-📖 How to Run
+## 📖 How to Run
 
-Clone this repository:
-
+### 1. Clone the repository
+```bash
 git clone https://github.com/PTucc327/job_market_analysis.git
 cd job_market_analysis
-
-
-Install dependencies:
-
-pip install -r requirements.txt
-
-
-Open the Jupyter Notebook:
-
-jupyter notebook job_market_analysis.ipynb
-
-✍️ Author
-
-Paul Tuccinardi – Data Science Student passionate about applying machine learning to real-world problems.
-
-💼 LinkedIn
-https://www.linkedin.com/in/paul-tuccinardi/
-
-📧 paultuccinardi@gmail.com
