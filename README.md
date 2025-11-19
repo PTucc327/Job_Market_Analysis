@@ -6,7 +6,7 @@ A Data Science Project by **Paul Tuccinardi**
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0+-brightgreen)
 ![NLTK](https://img.shields.io/badge/NLP-NLTK-yellow)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
-![Status](https://img.shields.io/badge/Status-Active_Project-blue)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
 ---
 
