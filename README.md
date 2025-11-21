@@ -145,9 +145,10 @@ Three models were trained:
 - Cross-validation  
 - Per-class metrics  
 
-**Key Issue:**  
-The “Other” category has high noise → causes most misclassifications.
-Insufficient amount of data for other job categories such as healthcare, or trades.
+## **Key Issue:**  
+- The “Other” category has high noise → causes most misclassifications.
+- Insufficient amount of data for other job categories such as healthcare, or trades.
+
 ---
 
 ## 🚀 Conclusions
