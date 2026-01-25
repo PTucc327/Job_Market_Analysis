@@ -199,3 +199,6 @@ pip install requirements.txt
 ```
 
 ### 3. Run Python Notebook
+```bash
+jupyter notebook Job_Market_Analysis.ipynb
+```
