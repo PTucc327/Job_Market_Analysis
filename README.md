@@ -191,3 +191,11 @@ Three models were trained:
 ```bash
 git clone https://github.com/PTucc327/job_market_analysis.git
 cd job_market_analysis
+```
+
+### 2. Install requirements
+```python
+pip install requirements.txt
+```
+
+### 3. Run Python Notebook
