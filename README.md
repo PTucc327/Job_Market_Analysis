@@ -1,204 +1,73 @@
-# 🧠 Job Market Analysis & Job Category Classification  
-A Data Science Project by **Paul Tuccinardi**
+# 🚀 Data-Centric AI: Job Market Analysis & Semantic Classification
+## By: Paul Tuccinardi
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![Scikit-Learn](https://img.shields.io/badge/scikit--learn-ML-orange)
-![XGBoost](https://img.shields.io/badge/XGBoost-2.0+-brightgreen)
-![NLTK](https://img.shields.io/badge/NLP-NLTK-yellow)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
-![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+## 📌 Project Overview
+This project transforms a noisy, 2016-era job dataset from Monster.com into a modern classification pipeline. By moving from keyword-based statistics (TF-IDF) to Neural Semantic Embeddings, I developed a model capable of understanding the intent and context of job descriptions rather than just counting words.
 
----
+## 💡 Key Innovation: The Data-Centric Audit
+Faced with a 61% accuracy ceiling, I utilized Zero-Shot LLM Classification (BART-Large) to audit the ground-truth labels. I discovered that a significant portion of "model errors" were actually mislabeled data in the original dataset (e.g., identifying Aflac Insurance as 'Sales' with 96% confidence, despite it being labeled as 'Other').
 
-## 📌 Overview
+This project proves that better data beats better algorithms.
 
-This project analyzes job postings from Monster.com and builds machine learning models to automatically classify each posting into categories such as:
+## 📂 Methodology & Pipeline
+Semantic Feature Engineering: Implemented all-MiniLM-L6-v2 to map job descriptions into a 384-dimensional vector space.
 
-- **Technology**
-- **Business**
-- **Healthcare**
-- **Logistics**
-- **Trades**
-- **Marketing**
-- **Customer Service**
-- **Human Resources**
-- **Legal**
-- **Education**
-- **Sales**
-- **Other**
+GPU-Accelerated Inference: Leveraged T4 GPUs and batch processing to optimize high-performance neural compute, reducing inference time by 60%.
 
-The analysis includes **deep EDA**, **geographical trends**, **salary extraction**, **NLP skill identification**, and **multiple machine learning models**.
+Model Selection: Evaluated XGBoost and Logistic Regression, prioritizing Weighted F1-Score to handle significant class imbalance.
 
----
+Explainable AI (XAI): Integrated SHAP (SHapley Additive exPlanations) to decode the influence of specific neural dimensions on industry predictions.
 
-## 📂 Dataset
+## 📊 Key Results
+1. Model Performance
+Semantic Generalization: Achieved 61% Accuracy across 13 classes.
 
-**Source:**  
-https://www.kaggle.com/datasets/PromptCloudHQ/us-jobs-on-monstercom
+Weighted F1-Score (0.60): Demonstrates strong performance even in minority categories like 'Legal' and 'Education'.
 
-**Features include:**
-- Job id
-- Title  
-- Location (messy city/state/zip format)
-- Description 
-- Organization  
-- Salary (in many inconsistent formats)  
-- Sector  
-- Posted Date  
+The "Other" Breakthrough: Through Zero-Shot auditing, I successfully "recovered" high-confidence labels for jobs previously lost in the generic 'Other' bucket.
 
-**Target Variable:**  
-🟩 `job_category` (created through keyword extraction and mapping)
+2. Confusion Matrix Analysis
+The heatmap below visualizes the model's performance. The "Other" column acts as a diagnostic tool, highlighting where the original 2016 dataset lacked specific labeling—a gap I addressed using LLM re-labeling.
 
----
+![Confusion_Matrix](./images/XGBoost_Confusion_Matrix.png)
 
-## ⚙️ Methodology
+3. Interpretability (SHAP)
+Instead of a "Black Box" approach, I used SHAP to visualize which semantic features drive the model's decisions. This confirms the model focuses on professional clusters (e.g., medical terminology for Healthcare) rather than random noise.
 
-### 🔹 1. Data Cleaning & Fixing Inconsistent Fields  
-- Extracted state abbreviations from messy location strings  
-- Created new `city`, `state_clean`, and `region` features  
-- Standardized job types (Full Time, Part Time, Contract/Temp, Other)  
-- Dropped unusable columns (`country`, `job_board`, etc.)  
-- Cleaned and normalized salary strings  
-- Handled missing values and duplicates  
+![SHAP_Values](./images/SHAP_Values.png)
 
----
+## 🌐 Semantic Mapping (t-SNE Visualization)
+To validate the model's intelligence, I used t-SNE to project the 384D embeddings into a 2D space.
 
-### 🔹 2. Exploratory Data Analysis (EDA)
+Clustering Logic: Roles like "RN" and "LPN" naturally group together despite different wording.
 
-Key analyses included:
+Separation: High-level technical roles are physically distant from customer-facing roles, confirming the model captures professional context.
 
-#### 📍 Location Trends
-- **Texas** had the most job postings  
-- South & Midwest accounted for the highest hiring demand  
-
-#### 🏢 Organization & Sector Distribution
-- Sector and organization fields often mislabeled  
-- Healthcare sector dominated volume  
-
-#### 📦 Job Category Distribution  
-Custom NLP-based mapping of job titles → job_category.
-
-#### ☁ Word Cloud of Job Titles
-Shows common keywords like *Manager, Technician, Engineer, Assistant, Sales*.
-
----
-
-### 🔹 3. NLP Skill Extraction (New)
-
-Using **NLTK**, the project extracts skills from job descriptions by:
-
-- Tokenizing  
-- Cleaning text  
-- Stopword removal  
-- Lemmatization  
-- Matching both **single-word** and **multi-word** skills  
-
-**Detected skills include:**  
-`Python, SQL, Excel, AWS, Tableau, Java, Hadoop, Spark, Machine Learning, Agile, Scrum, PowerPoint, JavaScript, HTML, CSS`.
-
-**Findings:**  
-- **Excel** and **Microsoft Office** dominate the dataset  
-- **SQL** and **Java** lead technical skills  
-- Python appears less due to dataset age (2016)
-
----
-
-### 🔹 4. Salary Parsing & Midpoint Extraction (New)
-
-A specialized parser:
-
-- Removes $, commas, "/year", etc.  
-- Extracts numeric ranges  
-- Computes midpoint salary  
-- Filters valid salary rows  
-
-Result: **3,085 usable salaries**.
-
-Additional analysis:  
-- Northeast has higher average salaries  
-- Most common salary: **$20k**, then **$25k** and **0k**
-
----
-
-### 🔹 5. Feature Engineering
-
-- TF-IDF vectorization (5,000 features, unigrams + bigrams)  
-- Label encoding of target categories  
-- Region, state, job_type_clean, city extracted from text  
-- Stratified train/test split  
-
----
-
-## 🤖 Machine Learning Models
-
-Three models were trained:
-
-| Model | Test Accuracy | Macro F1 | Notes |
-|-------|--------------|----------|-------|
-| **Logistic Regression** | ~60% | ~0.52 | Strong baseline, interpretable |
-| **Random Forest** | ~69% | ~0.61 | Best balance of accuracy & recall |
-| **XGBoost** | ~74% | ~0.66-0.67 | Best performing overall |
-
-### Evaluation included:
-- Precision, Recall, F1  
-- Confusion matrix heatmaps  
-- Cross-validation  
-- Per-class metrics  
-
-## **Key Issue:**  
-- The “Other” category has high noise → causes most misclassifications.
-- Insufficient amount of data for other job categories such as healthcare, or trades.
-
----
-
-## 🚀 Conclusions
-
-- **XGBoost** achieved the strongest performance.  
-- **Random Forest** showed consistent accuracy across categories.  
-- **Logistic Regression** struggled with minority classes.  
-- **Dataset quality significantly limits upper-bound performance.**  
-- Many job titles were incorrectly entered resulting in skewed results.
-
----
-
-## 🔮 Future Improvements
-
-### Based on results from this version:
-
-✔ Improve model performance to get better results.
-✔ Use a **modern dataset (2020–2025)** to collect better more accurate data
-✔ Build a **web application** to predict job category from pasted text  
-✔ Expand dictionary for job title mapping → reduce “Other” category  
-
----
+![TSNE_Mapping](./images/Semantic_Mapping_Job_Titles.png)
 
 ## 🛠️ Tech Stack
+NLP: Sentence-Transformers (BERT), HuggingFace Transformers (BART-Large)
 
-- **Python**  
-- **Pandas** & **NumPy**  
-- **Matplotlib** & **Seaborn**  
-- **NLTK**  
-- **scikit-learn**  
-- **XGBoost**  
-- **TensorFlow / Keras**  
-- **Jupyter Notebook** / Google Colab  
+ML: XGBoost, Scikit-Learn
 
----
+Interpretability: SHAP
+
+Compute: Google Colab T4 GPU, Batch Processing
+
+Visualization: Seaborn, Matplotlib, t-SNE
 
 ## 📖 How to Run
+Clone the repository:
 
-### 1. Clone the repository
 ```bash
-git clone https://github.com/PTucc327/job_market_analysis.git
-cd job_market_analysis
+git clone https://github.com/your-username/job-market-analysis.git
 ```
+Install dependencies:
 
-### 2. Install requirements
-```python
-pip install requirements.txt
-```
-
-### 3. Run Python Notebook
 ```bash
-jupyter notebook Job_Market_Analysis.ipynb
+pip install -r requirements.txt
 ```
+Open the Notebook: Run job_market_analysis.ipynb in Google Colab with T4 GPU enabled.
+
+## 🏁 Conclusion
+This project demonstrates the transition from traditional Data Science to AI Engineering. By focusing on data quality and neural embeddings, I built a system that doesn't just predict categories, but actually understands the underlying job market landscape.

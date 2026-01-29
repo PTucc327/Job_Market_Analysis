@@ -1,11 +1,23 @@
-numpy==1.26.4
-pandas==2.2.2
-matplotlib==3.8.4
-seaborn==0.13.2
-wordcloud==1.9.3
-nltk==3.8.1
-scikit-learn==1.4.2
-xgboost==2.0.3
-tensorflow==2.15.0
-keras==2.15.0
-joblib==1.3.2
+# Core Data Science
+numpy>=1.26.4
+pandas>=2.2.2
+joblib>=1.3.2
+
+# Visualizations
+matplotlib>=3.8.4
+seaborn>=0.13.2
+wordcloud>=1.9.3
+
+# NLP & Neural Embeddings (NEW & CRITICAL)
+nltk>=3.8.1
+sentence-transformers>=3.0.0
+transformers>=4.40.0
+torch>=2.2.0
+
+# Machine Learning
+scikit-learn>=1.4.2
+xgboost>=2.0.3
+
+# Explainability & UI (NEW & CRITICAL)
+shap>=0.45.0
+tqdm>=4.66.0
