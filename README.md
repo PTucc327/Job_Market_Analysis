@@ -22,7 +22,7 @@ Explainable AI (XAI): Integrated SHAP (SHapley Additive exPlanations) to decode 
 1. Model Performance
 Semantic Generalization: Achieved 61% Accuracy across 13 classes.
 
-Weighted F1-Score (0.60): Demonstrates strong performance even in minority categories like 'Legal' and 'Education'.
+Weighted F1-Score (0.60): Demonstrates strong performance even in minority categories like 'Legal' and 'Education'. This is more favorable than the baseline model which had a 0.5 Weighted F1-Score and approaches the theoretical ceiling identified through Zero-Shot BART-Large auditing at ~0.65.
 
 The "Other" Breakthrough: Through Zero-Shot auditing, I successfully "recovered" high-confidence labels for jobs previously lost in the generic 'Other' bucket.
 
@@ -60,7 +60,7 @@ Visualization: Seaborn, Matplotlib, t-SNE
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/job-market-analysis.git
+git clone https://github.com/PTucc327/Job_Market_Analysis.git
 ```
 Install dependencies:
 
